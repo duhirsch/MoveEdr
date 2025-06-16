@@ -12,9 +12,10 @@ curl https://raw.githubusercontent.com/duhirsch/MoveEdr/refs/heads/main/MoveEdr.
 The following Flags are available
 - `Undo` : Undo the EDR Move, works with `CustomPaths`
 - `Clear`: Clear the registry key's value
-- `Print`: Print the value of the registry key in  a human readable format instead of strings terminated by nullbytes
+- `Print`: Print the value of the registry key in a human-readable format instead of strings terminated by null bytes
+- `CustomOnly`: By default, the `CustomPaths` and `FullyCustomPaths` are added to the built-in moves. This flag ensures that *only* your custom paths are moved.
 - `CustomPaths`: Specify your own EDR Paths instead of using built-in ones. Only takes sources as inputs, to also customize the destination use `FullyCustomPaths` instead.
-- `FullyCustomPaths` : Specify sources and destinations, gives you full control over the move.
+- `FullyCustomPaths` : Specify sources and destinations, gives you control over destination instead of using a `$Suffix`.
 - `Suffix`: Use a different suffix for moved files instead of the default `_bak`
 - `Dump`: Dump the values of the registry key in a format that can be used with `Load`
 - `Load`: Load previously dumped values of the registry key
@@ -36,7 +37,7 @@ MoveEdr -CustomPaths "C:\Program Files\newAndShinyEdr","C:\Windows\System32\driv
 ```
 
 ## Long Story
-Some programs have a feature which prevents even local administrators from uninstalling or disabling them. Most of the times these are AVs/EDRs which prompt you for a deactivation password, even when you are administrator.
+Some programs have a feature which prevents even local administrators from uninstalling or disabling them. Most of the time these are AVs/EDRs which prompt you for a deactivation password, even when you are administrator.
 
 Here is a trick to disable them by moving files and folders around so that they can not be started on the next boot.
 
@@ -50,7 +51,7 @@ How exactly does `MoveFileEx` do this? Let's check the [documentation](https://l
 > 
 > This registry value is of type REG_MULTI_SZ. Each rename operation stores one of the following NULL-terminated strings, depending on whether the rename is a delete or not:
 >
->    szSrcFile\0\0
+>    szSrcFile\0\0  
 >    szSrcFile\0szDstFile\0
 
 This means that we can achieve the same effect as `movefile.exe`by creating the registry key `PendingFileRenameOperations`and enter the paths of the files/directories we want to delete in the correct `REG_MULTI_SZ` format.
