@@ -8,8 +8,8 @@ function MoveEdr{
 		[switch]$Print,
 		[switch]$Reboot,
 		[switch]$Undo,
-		[string[]]$CustomPaths,
-		[string[]]$FullyCustomPaths,
+		[string[]]$CustomPaths = @(),
+		[string[]]$FullyCustomPaths = @(),
 		[string[]]$Load,
 		[string] $Suffix = "_bak"
 	)
