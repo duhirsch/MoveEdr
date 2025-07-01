@@ -4,6 +4,13 @@ If you're admin you can force Windows to delete or move folders and files around
 
 ## Usage
 
+> [!CAUTION]
+> There is an issue with CrowdStrike which results in a bootloop with the message "INACCESSIBLE_BOOT_DEVICE".
+> My theory is that either CrowdStrike itself or a software deployment solution is trying to install the missing CrowdStrike files but fails and leaves it in a broken state.
+> I am not sure if this depends on the elapsed time after the move or on the number of performed reboots.
+> Moving CrowdStrike away for the first time and rebooting works fine.
+> Maybe schedule the undo after the first reboot to err on the side of caution.
+
 ```
 curl https://raw.githubusercontent.com/duhirsch/MoveEdr/refs/heads/main/MoveEdr.ps1 | iex; MoveEdr
 # Reboot!
