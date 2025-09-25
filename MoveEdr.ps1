@@ -74,7 +74,7 @@ function MoveEdr{
 			# Elastic EDR
 			"C:\Program Files\Elastic",
 			"C:\Windows\System32\drivers\elastic-endpoint-driver.sys",
-			"C:\Windows\System32\drivers\ElasticElam.sys"
+			"C:\Windows\System32\drivers\ElasticElam.sys",
 
 			#Fireeye/XAGT/xAgent/Trellix Endpoint Security
 			"C:\Program Files (x86)\FireEye\xagt",
