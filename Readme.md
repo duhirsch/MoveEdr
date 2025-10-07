@@ -72,7 +72,6 @@ The `MoveEdr` script automates creating the correct registry keys for the follow
 - [x] CrowdStrike
 - [ ] Cyberreason
 - [x] Elastic
-- [ ] FireEye
 - [ ] Fortinet
 - [ ] Kaspersky
 - [ ] Malwarebytes
@@ -80,6 +79,7 @@ The `MoveEdr` script automates creating the correct registry keys for the follow
 - [ ] Palo Alto Cortex
 - [ ] Sentinel One
 - [ ] Symantec
+- [X] Trellix (previously FireEye) thanks to [@0x48756773](https://github.com/0x48756773)
 - [x] Trend Micro Security Agent
 - [ ] VMware Carbon Black
 - [ ] Webroot
