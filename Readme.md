@@ -75,11 +75,11 @@ The `MoveEdr` script automates creating the correct registry keys for the follow
 - [ ] Fortinet
 - [ ] Kaspersky
 - [ ] Malwarebytes
-- [ ] McAfee
+- [X] McAfee (thanks to [mschillinger](https://github.com/mschillinger))
 - [ ] Palo Alto Cortex
 - [ ] Sentinel One
 - [ ] Symantec
-- [X] Trellix (previously FireEye) thanks to [@0x48756773](https://github.com/0x48756773)
+- [X] Trellix (previously FireEye, thanks to [@0x48756773](https://github.com/0x48756773))
 - [x] Trend Micro Security Agent
 - [ ] VMware Carbon Black
 - [ ] Webroot
